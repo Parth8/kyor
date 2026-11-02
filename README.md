@@ -6,7 +6,7 @@ A design-forward, lifestyle-first website for KYOR, an Indian prebiotic soda bra
 (Kokum Cola and Chili Guava). It's a standalone static site: no build step and no dependencies.
 
 ```bash
-cd kyor && python3 -m http.server 8080   # then open http://localhost:8080
+python3 -m http.server 8080   # then open http://localhost:8080
 ```
 
 ## Interaction model: one chapter at a time, no long scroll
