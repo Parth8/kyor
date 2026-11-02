@@ -1,1 +1,0 @@
-Website build for Kyor.
