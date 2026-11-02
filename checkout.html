@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Checkout · KYOR</title>
+  <meta name="description" content="Pay for your KYOR order by UPI, card, netbanking or cash on delivery.">
+  <meta name="theme-color" content="#e6e4df">
+  <meta name="robots" content="noindex">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Besley:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body class="co-page">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="bar" data-field="ground">
+    <a class="bar__mark" href="index.html">KYOR</a>
+    <a class="bar__back" href="index.html#shop">Back to the shop</a>
+  </header>
+
+  <main id="main" class="co">
+    <div class="co__form" id="coFormWrap">
+      <h1 class="co__title">Checkout</h1>
+      <p class="co__lead">Delivery in one to five days. Your cans travel in a plastic-free box.</p>
+
+      <form id="coForm" novalidate>
+        <section class="co__block" aria-labelledby="contactTitle">
+          <h2 class="h3" id="contactTitle">Contact</h2>
+          <div class="fields">
+            <div class="field field--full">
+              <label for="name">Full name</label>
+              <input id="name" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="phone">Mobile number</label>
+              <div class="field__prefix"><span aria-hidden="true">+91</span><input id="phone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="10" required aria-describedby="phoneHint"></div>
+              <p class="field__hint" id="phoneHint">For delivery updates on WhatsApp or SMS.</p>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+        </section>
+
+        <section class="co__block" aria-labelledby="deliveryTitle">
+          <h2 class="h3" id="deliveryTitle">Delivery</h2>
+          <div class="fields">
+            <div class="field field--full">
+              <label for="address">Flat, building and street</label>
+              <input id="address" name="address" autocomplete="street-address" required>
+            </div>
+            <div class="field">
+              <label for="pin">Pincode</label>
+              <input id="pin" name="pin" inputmode="numeric" autocomplete="postal-code" maxlength="6" required aria-describedby="pinHint">
+              <p class="field__hint" id="pinHint">We’ll fill in the city and tell you the delivery date.</p>
+            </div>
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" name="city" autocomplete="address-level2" required>
+            </div>
+          </div>
+          <div class="options" role="radiogroup" aria-label="Delivery speed">
+            <label class="option"><input type="radio" name="ship" value="standard" checked><span><b>Standard</b><small id="stdEta">1 to 5 days. Free over ₹999, otherwise ₹79.</small></span></label>
+            <label class="option"><input type="radio" name="ship" value="express"><span><b>Next day</b><small>Mumbai, Pune, Bengaluru and Delhi NCR. ₹149.</small></span></label>
+          </div>
+        </section>
+
+        <section class="co__block" aria-labelledby="payTitle">
+          <h2 class="h3" id="payTitle">Payment</h2>
+          <div class="options options--pay" role="radiogroup" aria-label="Payment method">
+            <label class="option"><input type="radio" name="pay" value="upi" checked><span><b>UPI</b><small>Pay from any UPI app.</small></span></label>
+            <label class="option"><input type="radio" name="pay" value="card"><span><b>Card</b><small>Debit or credit, Visa, Mastercard and RuPay.</small></span></label>
+            <label class="option"><input type="radio" name="pay" value="netbanking"><span><b>Netbanking</b><small>All major Indian banks.</small></span></label>
+            <label class="option"><input type="radio" name="pay" value="cod"><span><b>Cash on delivery</b><small>Cash or UPI at the door. ₹40 handling fee.</small></span></label>
+          </div>
+
+          <div class="pay-detail" data-pay-detail="upi">
+            <div class="field">
+              <label for="vpa">UPI ID</label>
+              <input id="vpa" name="vpa" autocomplete="off" placeholder="yourname@okbank" aria-describedby="vpaHint">
+              <p class="field__hint" id="vpaHint">We’ll send a payment request to your UPI app. Leave it empty to pay by QR code instead.</p>
+            </div>
+          </div>
+          <div class="pay-detail" data-pay-detail="card" hidden>
+            <p>You’ll enter your card details on the payment provider’s secure page. KYOR never sees or stores your card number.</p>
+          </div>
+          <div class="pay-detail" data-pay-detail="netbanking" hidden>
+            <div class="field">
+              <label for="bank">Your bank</label>
+              <select id="bank" name="bank">
+                <option value="">Choose your bank</option>
+                <option>State Bank of India</option><option>HDFC Bank</option><option>ICICI Bank</option><option>Axis Bank</option>
+                <option>Kotak Mahindra Bank</option><option>Bank of Baroda</option><option>Punjab National Bank</option><option>Another bank</option>
+              </select>
+            </div>
+          </div>
+          <div class="pay-detail" data-pay-detail="cod" hidden>
+            <p>Keep cash or a UPI app ready when the box arrives. Orders over ₹3,000 must be paid online.</p>
+          </div>
+        </section>
+
+        <p class="co__error" id="coError" role="alert"></p>
+        <button class="btn btn--pay" type="submit" id="payBtn">Pay ₹0</button>
+        <p class="co__test">Test mode: no money moves until a payment provider is connected.</p>
+      </form>
+    </div>
+
+    <details class="summary" id="summary">
+      <summary><span class="h3">Your order</span> <span class="summary__total" id="sumTop">₹0</span></summary>
+      <ul class="summary__list" id="sumList"></ul>
+      <div class="promo">
+        <label for="promo" class="visually-hidden">Promo code</label>
+        <input id="promo" placeholder="Promo code" autocomplete="off" aria-describedby="promoMsg">
+        <button type="button" class="btn" id="promoBtn">Apply</button>
+      </div>
+      <p class="promo__msg" id="promoMsg">First order? Try FIRSTSIP for 10% off.</p>
+      <dl class="totals" id="totals"></dl>
+    </details>
+
+    <img class="done__can" src="assets/cans/can-kokum-grid.webp" alt="" width="448" height="896">
+    <section class="done" id="done" hidden aria-labelledby="doneTitle" tabindex="-1">
+      <h1 class="co__title" id="doneTitle">Order placed</h1>
+      <p class="co__lead" id="doneLead"></p>
+      <dl class="done__facts" id="doneFacts"></dl>
+      <a class="btn" href="index.html">Back to KYOR</a>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

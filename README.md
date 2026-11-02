@@ -1,53 +1,88 @@
-# KYOR — Tradition, carbonated
+# KYOR: prebiotic soda from India
 
-Website build for Kyor. Live on GitHub Pages: open `index.html` at the site root.
-
-A design-forward, lifestyle-first website for KYOR, an Indian prebiotic soda brand
-(Kokum Cola and Chili Guava). It's a standalone static site: no build step and no dependencies.
+Website build for Kyor. It's a static site with no build step. `index.html` is the home page and shop, and `checkout.html` is the payment page.
 
 ```bash
 python3 -m http.server 8080   # then open http://localhost:8080
 ```
 
-## Interaction model: one chapter at a time, no long scroll
+## The idea
 
-The site is a set of six full-screen **chapters**. You move between them with the **brass dial**
-at the bottom of the screen (drag it or tap a label), the arrow buttons, the mouse wheel,
-the arrow keys or 1–6, or a horizontal swipe on mobile. Each move plays a block-print shutter
-transition with the chapter's Hindi name.
+The two flavours are rituals most Indians already know: a glass of kokum after a heavy coastal lunch, and guava from the school cart rubbed with chilli and salt. **The page is coloured by what is in the can.** Each chapter is one flat field taken from the product: kokum rind (oxblood), guava flesh (pink), Guntur chilli (red), the can's sage, and matte aluminium. Midway through, the can holds still while those colours wipe up behind it, one ingredient at a time.
 
-| # | Chapter | Signature interaction |
-|---|---------|-----------------------|
-| 01 | **Ghar** (home) | Drag the can to spin its wrap-around label (with inertia). The flavour switch re-themes the whole site. |
-| 02 | **Mitti** (farm → stomach) | Drag the brass token along the route: soil → harvest → sun → fizz → can → stomach. The sun moves with you. |
-| 03 | **Din** (a day) | Turn a 24h sundial. The sky changes colour and each moment pairs a flavour with a real routine. |
-| 04 | **Andar** (inside) | Ingredient tiles (Hindi and English, with origins) and a nutrition "ration ticket". |
-| 05 | **Adda** (lifestyle) | Fling a deck of cards: lookbook, manifesto, playlist, events, recipes, merch. |
-| 06 | **Dukaan** (shop) | Storefront with filters, a 15% subscribe-and-save toggle and a *thaila* (bag) drawer with a free-delivery meter. |
+How the direction was chosen:
+- **Awwwards Food & Drink sites:** Morpho, Vibe, Yaas, Agrumea, Lajoya and Delta Cafés. The common thread is a large real product, real photography and flat colour fields.
+- **The `taste-skill` study of 247 award sites:** I used its "colour chapters" direction with the "object, large" hero.
+- **Its house rules:** no eyebrow labels, no monospace, no 01/02 numbering, no hairlines, gradients or shadows, and two typefaces at most.
+- **The type:** Besley, a fat Clarendon like the can's wordmark (the old-school face), with Switzer, a modern grotesk.
+- **Language:** everything is in English. Indian context comes from places, ingredients and photographs, not from script.
 
-**Checkout** is a 3-step flow: details → delivery (fills in the city from the pincode, shows a delivery estimate)
-→ payment (UPI QR/ID, a live metal card preview that flips for the CVV, netbanking, COD), with promo codes
-(`PEHLA10`, `ADDA15`), GST shown and a success ticket.
+## What's on the page
 
-A press-and-hold "crack the can" intro plays once per session.
+| Section | What it does |
+| --- | --- |
+| Hero | The can, large, on its fruit's colour. Switching between Kokum Cola and Chili Guava recolours the hero and swaps the can. |
+| Flavours you grew up with | The two rituals, told with real photographs. |
+| What goes in the can | A held scroll scene: the can stays put and five colour fields wipe through, each with one ingredient fact. |
+| Per 350 ml can | Nutrition, as a plain table. |
+| From the farm to your fridge | A drag row of places: Sindhudurg, Guntur, Prayagraj, Pune, your city. |
+| Where it fits in your day | Six moments from 6:40 am to 10:15 pm. Hovering or tapping a row shows its photograph. |
+| Build a crate | **The interactive part.** Pick 6, 12 or 24 cans, slide the Kokum/Guava mix, choose one-off or a subscription, and watch the crate and price update. |
+| Come to a Kyor session | The offline community: terrace events with RSVP links. |
+| Checkout | Contact, delivery (the pincode fills in the city and the delivery date), payment by UPI, card, netbanking or cash on delivery, promo code, GST, and a confirmation screen. |
+
+Accessibility:
+- Native scrolling everywhere: no scroll hijacking and no custom cursor.
+- With reduced motion or without JavaScript, the held scene becomes five stacked chapters and nothing stays hidden.
+- Every control works from the keyboard.
 
 ## Files
 
-- `index.html`: page structure
-- `css/kyor.css`: design tokens (flavour themes are on `:root[data-flavour]`) and all styles, including responsive rules
-- `js/data.js`: **all copy, products, prices and moments live here**
-- `js/can.js`: procedural SVG cans and product art
-- `js/app.js`: chapters, dial, gestures, the interactions above, storefront and bag
-- `js/checkout.js`: checkout validation and the simulated payment
-- `assets/`: the tested can renders
+- `index.html`, `checkout.html`: the two pages
+- `css/site.css`: design tokens (colour fields, type scale, spacing) and every section, with tablet and phone layouts
+- `css/checkout.css`: the checkout
+- `js/data.js`: **prices, products and the flavour copy**
+- `js/store.js`: the bag, kept in the browser's localStorage and shared by both pages
+- `js/site.js`: flavour switch, held scene, origins row, day index, crate builder, bag
+- `js/checkout.js`: validation, totals and a test-mode payment
+- `assets/cans/`: the cans, cut out of the tested renders in `assets/renders/`
+- `assets/photos/`: photographs (credits below)
 
-## Going live
+## Before launch
 
-`processPayment()` in `js/checkout.js` is the integration point. Create an order on your server, then open
-Razorpay, Cashfree or Stripe checkout there. The UPI QR is a decorative placeholder until then.
-Health copy is phrased as traditional use. Have it checked against FSSAI advertising rules before launch.
+1. **Payments.** `takePayment()` in `js/checkout.js` simulates a successful payment, and the page says it's in test mode. To go live, create the order on a server and open Razorpay, Cashfree or Stripe from there. Card details should only ever be entered on the provider's page.
+2. **Product photography.** The cans are cut from the 1024 px renders, so they look soft at hero size. A 3000 px or larger render or photograph of each can, on a transparent background, will fix that.
+3. **Sample content to confirm or replace:**
+   - Prices: ₹540 for a 6-pack, ₹1,020 for 12, ₹1,920 for 24, and 15% off subscriptions.
+   - Nutrition figures and the ingredient lists.
+   - Sourcing facts: 140 farming families, the women-led chilli collective, 24-hour pressing, a Pune brewery making 4,000 cans a day.
+   - Delivery promises and the ₹3,000 cash-on-delivery limit.
+   - Session dates and neighbourhoods.
+   - The `hello@` and `sessions@kyor.in` addresses.
+   - The `FIRSTSIP` promo code.
+   - The merch items.
+4. **Health copy** is kept to traditional use and plain nutrition. Check it against FSSAI advertising rules.
 
-## Preview
+## Photo credits
 
-![Desktop](preview/desktop.png)
-![Mobile](preview/mobile.png)
+Every photo is downloaded into `assets/photos/` and credited in the site footer. None of them shows KYOR's own farms or staff. They show the world the drink comes from.
+
+| File | Photograph | Licence | Source |
+| --- | --- | --- | --- |
+| kokum-steel-plate.jpg | *Garcinia indica fruit*, Phadke09 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Garcinia_indica_fruit.jpg |
+| kokum-rinds-drying.jpg | *Garcinia indica rinds being dried*, Subray Hegde | CC BY 1.0 | https://commons.wikimedia.org/wiki/File:Garcinia_indica_rinds_being_dried.jpg |
+| kokum-sugar-jar.jpg | *Kokam fruit recipe with sugar*, Phadke09 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Kokam_Fruit_Recipe_with_Sugar_Garcinia_indica_fruit.jpg |
+| guava-hand.jpg | Samee Anderson | Unsplash Licence | https://unsplash.com/photos/eiCzR_AVHJQ |
+| chilli-newspaper.jpg | Shubha Gambhir | Unsplash Licence | https://unsplash.com/photos/47gzK__lX30 |
+| chilli-farmer.jpg | surya kumar chintapula | Unsplash Licence | https://unsplash.com/photos/ztxMS2tLorw |
+| chilli-tarps.jpg | Anudeep | Unsplash Licence | https://unsplash.com/photos/ey1mpf2Teh0 |
+| konkan-fort-window.jpg | Atharva Whaval | Unsplash Licence | https://unsplash.com/photos/LWkkbHH_sP8 |
+| sherbet-stall.jpg | atelierbyvineeth | Unsplash Licence | https://unsplash.com/photos/9ykib1OvFfE |
+| chai-stall.jpg | Rudra Gupta | Unsplash Licence | https://unsplash.com/photos/03p5R9-lXEs |
+| friends-beach.jpg | Debabrata Patra | Unsplash Licence | https://unsplash.com/photos/s_Z3ePnd0dU |
+| friends-phone.jpg | Karthik Balakrishnan | Unsplash Licence | https://unsplash.com/photos/Y4zNMW3pQAs |
+| run-monsoon.jpg | Zoshua Colah | Unsplash Licence | https://images.unsplash.com/photo-1753443278948-60d73706417c |
+| marine-drive.jpg | Zoshua Colah | Unsplash Licence | https://images.unsplash.com/photo-1753806389212-d017f9170074 |
+| station-cst.jpg | Anirudh | Unsplash Licence | https://images.unsplash.com/photo-1665206221704-624dd27939ad |
+| terrace-sunset.jpg | Saravanan Murugan | Unsplash Licence | https://images.unsplash.com/photo-1761465863322-bbe8a90ce03e |
+| guava-market.jpg | Sagar Pujari | Pexels Licence | https://www.pexels.com/photo/36478363/ |
