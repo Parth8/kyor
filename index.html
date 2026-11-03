@@ -1,406 +1,235 @@
 <!doctype html>
-<html lang="en" data-flavour="kokum">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>KYOR · Prebiotic soda from India</title>
-  <meta name="description" content="KYOR makes prebiotic soda from Indian flavours: Kokum Cola and Chili Guava. 3 g of fibre, no added sugar, ₹90 a can.">
-  <meta name="theme-color" content="#4e1525">
-  <script>document.documentElement.classList.add('js')</script>
+  <title>KYOR · Peel the can</title>
+  <meta name="description" content="KYOR is a prebiotic soda from India: Kokum Cola and Chili Guava. Spin the can, peel its label and every tile opens a room.">
+  <meta name="theme-color" content="#3a1a12">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Besley:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://api.fontshare.com">
-  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700;800&family=Montserrat:wght@700;800;900&family=Roboto+Condensed:wght@500&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/cans/can-kokum.webp">
-  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/kyor.css">
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+  </script>
 </head>
-<body>
-  <a class="skip" href="#main">Skip to content</a>
+<body data-flavour="kokum" data-state="whole">
+  <a class="skip" href="#hud">Skip to the shop and rooms</a>
 
-  <header class="bar" id="bar" data-field="kokum">
-    <a class="bar__mark" href="#top" aria-label="KYOR, back to top">KYOR</a>
-    <nav class="bar__nav" aria-label="Sections">
-      <a href="#flavours">Flavours</a>
-      <a href="#origins">Origins</a>
-      <a href="#day">Your day</a>
-      <a href="#shop">Shop</a>
+  <!-- the stage -->
+  <div class="mega" aria-hidden="true">
+    <div class="mega__row"><div class="mega__track" data-mega="0"></div></div>
+    <div class="mega__row mega__row--outline"><div class="mega__track" data-mega="1"></div></div>
+  </div>
+  <img class="can-still" id="canStill" src="assets/cans/can-kokum.webp" alt="" width="448" height="902" aria-hidden="true">
+  <canvas id="gl" role="img" aria-label="A KYOR can in 3D. Drag to spin it. Hold the peel button to deal its label out as cards."></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="top__mark" href="#" data-home aria-label="KYOR, home">
+      <img src="assets/kit/kokum/wordmark.webp" alt="KYOR" width="1084" height="384">
+    </a>
+    <nav class="top__nav" aria-label="Rooms">
+      <button type="button" data-room="origins">Origins</button>
+      <button type="button" data-room="day">Your day</button>
+      <button type="button" data-room="inside">Inside</button>
+      <button type="button" data-room="sessions">Sessions</button>
+      <button type="button" data-room="shop">Shop</button>
     </nav>
-    <button class="bar__bag" type="button" data-open-bag>Bag <span data-bag-count>0</span></button>
-    <button class="bar__menu" type="button" aria-expanded="false" aria-controls="menu" id="menuBtn">Menu</button>
+    <button class="top__bag" type="button" data-open-bag>Bag <b data-bag-count>0</b></button>
   </header>
 
-  <div class="menu" id="menu" hidden>
-    <nav aria-label="Sections">
-      <a href="#flavours">Flavours</a>
-      <a href="#origins">Origins</a>
-      <a href="#day">Your day</a>
-      <a href="#shop">Shop</a>
-      <a href="#sessions">Sessions</a>
-    </nav>
-  </div>
-
-  <main id="main">
-
-    <!-- Hero: the can, large, on the colour of its fruit -->
-    <section class="hero field" id="top" data-field="kokum" aria-labelledby="heroTitle">
-      <div class="hero__text">
-        <h1 class="hero__title" id="heroTitle"><span class="hero__word" data-hero-line="0">Kokum</span> <span class="hero__word" data-hero-line="1">Cola</span></h1>
-        <p class="hero__line" id="heroLine">Prebiotic soda from India. Konkan kokum, kola nut and black salt, with 3 g of fibre and no added sugar.</p>
-        <div class="hero__actions">
-          <button class="btn" type="button" id="heroAdd" data-add="kk6">Add a 6-pack, ₹540</button>
-          <div class="switch" role="radiogroup" aria-label="Flavour">
-            <button type="button" role="radio" aria-checked="true" data-flavour="kokum">Kokum Cola</button>
-            <button type="button" role="radio" aria-checked="false" data-flavour="guava">Chili Guava</button>
-          </div>
-        </div>
-      </div>
-      <div class="hero__can" aria-hidden="true">
-        <img class="hero__img is-on" data-can="kokum" src="assets/cans/can-kokum.webp" alt="" width="448" height="902" fetchpriority="high">
-        <img class="hero__img" data-can="guava" src="assets/cans/can-guava.webp" alt="" width="448" height="902">
-      </div>
-      <p class="hero__price">₹90 a can. Free delivery over ₹999.</p>
+  <main id="hud" class="hud">
+    <section class="hud__intro" aria-labelledby="title">
+      <h1 class="hud__title" id="title"><span data-flavour-name>Kokum Cola</span></h1>
+      <p class="hud__line" data-flavour-line>Prebiotic soda from India. Konkan kokum, kola nut and black salt. 3 g fibre, no added sugar.</p>
+      <button class="btn" type="button" data-add-hero>Add 6 cans · ₹540</button>
     </section>
 
-    <!-- Two rituals you already know -->
-    <section class="flavours" id="flavours" data-field="ground" aria-labelledby="flavoursTitle">
-      <h2 class="h2 flavours__title" id="flavoursTitle" data-reveal>Flavours you grew up with</h2>
-      <p class="statement flavours__statement" data-reveal>India has had functional drinks for centuries. We put two of them in a can.</p>
+    <div class="peel" id="peelBox">
+      <button class="peel__btn" type="button" id="peelBtn" aria-describedby="peelHint">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="peel__track" cx="50" cy="50" r="46"/><circle class="peel__ring" cx="50" cy="50" r="46"/></svg>
+        <span class="peel__label" id="peelLabel">Hold to peel</span>
+      </button>
+      <p class="peel__hint" id="peelHint">Hold the button, or scroll down, to peel the label off the can.</p>
+    </div>
 
-      <article class="ritual ritual--kokum">
-        <figure class="ritual__pic" data-reveal>
-          <img src="assets/photos/kokum-steel-plate.jpg" alt="Whole and halved kokum fruit on a steel plate" width="1280" height="1103" loading="lazy">
-          <figcaption>Fresh kokum, halved. The rind gives the colour.</figcaption>
-        </figure>
-        <div class="ritual__text" data-reveal>
-          <h3 class="h3">Kokum after lunch</h3>
-          <p>On the Konkan coast a glass of kokum comes after every heavy meal: tart, cooling and deep pink. We steep the sun-dried rind cold with kola nut, a little jaggery and black salt.</p>
-          <button class="link" type="button" data-add="kk6">Add Kokum Cola, ₹540 for 6</button>
-        </div>
-      </article>
+    <div class="flavours" role="radiogroup" aria-label="Flavour">
+      <button type="button" role="radio" aria-checked="true" data-flavour="kokum">
+        <img src="assets/cans/can-kokum.webp" alt="" width="448" height="902"><span>Kokum Cola</span>
+      </button>
+      <button type="button" role="radio" aria-checked="false" data-flavour="guava">
+        <img src="assets/cans/can-guava.webp" alt="" width="448" height="902"><span>Chili Guava</span>
+      </button>
+    </div>
 
-      <article class="ritual ritual--guava">
-        <div class="ritual__text" data-reveal>
-          <h3 class="h3">Guava, chilli and salt</h3>
-          <p>The cart outside every school cut guava into four and rubbed it with red chilli and salt. We press pink guava with fire-roasted Guntur chilli, lime and rock salt, then add the fizz.</p>
-          <button class="link" type="button" data-add="cg6">Add Chili Guava, ₹540 for 6</button>
-        </div>
-        <figure class="ritual__pic" data-reveal>
-          <img src="assets/photos/guava-hand.jpg" alt="A hand holding half a pink guava" width="1400" height="2100" loading="lazy">
-          <figcaption>Pink-fleshed guava.</figcaption>
-        </figure>
-        <figure class="ritual__pic ritual__pic--side" data-reveal>
-          <img src="assets/photos/chilli-newspaper.jpg" alt="A heap of red chillies on newspaper" width="1400" height="927" loading="lazy">
-          <figcaption>Red chillies, before roasting.</figcaption>
-        </figure>
-      </article>
-    </section>
+    <p class="drag-hint" id="dragHint" aria-hidden="true"><span>←</span> drag to spin <span>→</span></p>
 
-    <!-- Held scene: the can stays, the field changes behind it -->
-    <section class="scene" id="inside" aria-labelledby="insideTitle">
-      <h2 class="visually-hidden" id="insideTitle">What goes in the can</h2>
-      <ol class="scene__steps">
-        <li class="step" data-field="kokum">
-          <div class="step__text">
-            <h3 class="h2">Kokum rind, dried for a week</h3>
-            <p>Picked by hand in April and May by 140 farming families around Sindhudurg, then dried on woven mats in the sun.</p>
-          </div>
-          <img class="step__can" src="assets/cans/can-kokum.webp" alt="" width="448" height="902" loading="lazy">
-          <p class="step__count">1 of 5</p>
-        </li>
-        <li class="step" data-field="guava">
-          <div class="step__text">
-            <h3 class="h2">Pink guava, pressed in a day</h3>
-            <p>Winter fruit from orchards around Prayagraj, picked November to February and cold-pressed within 24 hours.</p>
-          </div>
-          <img class="step__can" src="assets/cans/can-guava.webp" alt="" width="448" height="902" loading="lazy">
-          <p class="step__count">2 of 5</p>
-        </li>
-        <li class="step" data-field="chilli">
-          <div class="step__text">
-            <h3 class="h2">Guntur chilli, roasted on wood</h3>
-            <p>Sorted by a women-led farmer collective, then fire-roasted so the heat builds slowly instead of biting.</p>
-          </div>
-          <img class="step__can" src="assets/cans/can-guava.webp" alt="" width="448" height="902" loading="lazy">
-          <p class="step__count">3 of 5</p>
-        </li>
-        <li class="step" data-field="sage">
-          <div class="step__text">
-            <h3 class="h2">3 g of fibre for your gut</h3>
-            <p>Chicory-root inulin is a prebiotic: it feeds the good bacteria you already have. No added sugar, 34 to 38 kcal a can.</p>
-          </div>
-          <img class="step__can" src="assets/cans/can-kokum-grid.webp" alt="" width="448" height="896" loading="lazy">
-          <p class="step__count">4 of 5</p>
-        </li>
-        <li class="step" data-field="ground">
-          <div class="step__text">
-            <h3 class="h2">A matte can, recycled forever</h3>
-            <p>350 ml of aluminium. No plastic rings, no shrink wrap, nothing in the box that can’t become another can.</p>
-          </div>
-          <img class="step__can" src="assets/cans/can-kokum.webp" alt="" width="448" height="902" loading="lazy">
-          <p class="step__count">5 of 5</p>
-        </li>
-      </ol>
-    </section>
-
-    <!-- Nutrition, set as a plain table -->
-    <section class="facts" id="facts" data-field="ground" aria-labelledby="factsTitle">
-      <div class="facts__side">
-        <h2 class="h2" id="factsTitle" data-reveal>Per 350&nbsp;ml can</h2>
-        <figure data-reveal>
-          <img src="assets/photos/kokum-sugar-jar.jpg" alt="Halved kokum fruit packed with sugar in a glass jar" width="1280" height="1198" loading="lazy">
-          <figcaption>How kokum syrup is made at home: rind and sugar, left in the sun. Ours has no added sugar.</figcaption>
-        </figure>
-      </div>
-      <div class="facts__table" data-reveal>
-        <table>
-          <thead>
-            <tr><th scope="col"><span class="visually-hidden">Nutrient</span></th><th scope="col">Kokum Cola</th><th scope="col">Chili Guava</th></tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">Energy</th><td>38 kcal</td><td>34 kcal</td></tr>
-            <tr><th scope="row">Added sugar</th><td>0 g</td><td>0 g</td></tr>
-            <tr><th scope="row">Total sugars</th><td>4.2 g</td><td>3.8 g</td></tr>
-            <tr><th scope="row">Prebiotic fibre</th><td>3 g</td><td>3 g</td></tr>
-            <tr><th scope="row">Caffeine</th><td>18 mg, from kola nut</td><td>None</td></tr>
-            <tr><th scope="row">Also in it</th><td>Kokum, kola nut, jaggery, black salt, cumin</td><td>Guava, Guntur chilli, lime, rock salt, stevia leaf</td></tr>
-          </tbody>
-        </table>
-        <p class="note">Vegan and gluten-free. Kokum and chilli are traditional ingredients, not medicine.</p>
-      </div>
-    </section>
-
-    <!-- Origins: a drag row of real places -->
-    <section class="origins" id="origins" data-field="sage" aria-labelledby="originsTitle">
-      <div class="origins__head">
-        <h2 class="h2" id="originsTitle" data-reveal>From the farm to your fridge</h2>
-        <p class="lead" data-reveal>Three states, one brewery, and the road to wherever you are.</p>
-        <div class="origins__ctrl">
-          <button type="button" class="round" data-row="-1" aria-label="Previous place">←</button>
-          <button type="button" class="round" data-row="1" aria-label="Next place">→</button>
-        </div>
-      </div>
-      <ul class="row" id="row" tabindex="0" aria-label="Places, scroll sideways">
-        <li class="place">
-          <img src="assets/photos/konkan-fort-window.jpg" alt="The Arabian Sea seen through a window in a laterite fort wall" width="1400" height="1859" loading="lazy">
-          <h3 class="h3">Sindhudurg, Maharashtra</h3>
-          <p>Kokum trees grow along the red laterite coast. The fruit is ready when it turns deep purple.</p>
-        </li>
-        <li class="place">
-          <img src="assets/photos/kokum-rinds-drying.jpg" alt="Kokum rinds drying on a cloth in the sun" width="1280" height="1711" loading="lazy">
-          <h3 class="h3">Seven days in the sun</h3>
-          <p>Only the rind goes into the can. The seeds go back to the farmers, who press them for kokum butter.</p>
-        </li>
-        <li class="place">
-          <img src="assets/photos/chilli-farmer.jpg" alt="A farmer laughing among heaps of drying red chillies" width="1600" height="1067" loading="lazy">
-          <h3 class="h3">Guntur, Andhra Pradesh</h3>
-          <p>Chilli is graded by hand before it goes anywhere near a fire.</p>
-        </li>
-        <li class="place">
-          <img src="assets/photos/chilli-tarps.jpg" alt="Red chillies drying on large tarps in a field below green hills" width="1800" height="1350" loading="lazy">
-          <h3 class="h3">Two weeks on tarps</h3>
-          <p>Dried in the open until it snaps, then roasted over wood in small lots.</p>
-        </li>
-        <li class="place">
-          <img src="assets/photos/guava-market.jpg" alt="Green guavas stacked at a market stall" width="1200" height="2132" loading="lazy">
-          <h3 class="h3">Prayagraj, Uttar Pradesh</h3>
-          <p>The winter crop has the pinkest flesh. We buy it straight from the orchards.</p>
-        </li>
-        <li class="place place--object">
-          <img src="assets/cans/can-kokum-grid.webp" alt="A KYOR Kokum Cola can" width="448" height="896" loading="lazy">
-          <h3 class="h3">Pune, Maharashtra</h3>
-          <p>Brewed, carbonated and canned in small batches, about 4,000 cans a day.</p>
-        </li>
-        <li class="place">
-          <img src="assets/photos/marine-drive.jpg" alt="People sitting along the sea wall at Marine Drive, Mumbai" width="1600" height="1067" loading="lazy">
-          <h3 class="h3">Your city</h3>
-          <p>One to five days anywhere in India. Next day in Mumbai, Pune, Bengaluru and Delhi NCR.</p>
-        </li>
+    <nav class="deck" aria-label="Rooms on the label">
+      <p class="deck__lead">Every tile on the label is a room.</p>
+      <ul>
+        <li><button type="button" data-room="origins"><b>The fruit</b> Origins</button></li>
+        <li><button type="button" data-room="day"><b>The runner</b> Your day</button></li>
+        <li><button type="button" data-room="inside"><b>The calm</b> Inside</button></li>
+        <li><button type="button" data-room="sessions"><b>The arch</b> Sessions</button></li>
+        <li><button type="button" data-room="shop"><b>The band</b> Shop</button></li>
       </ul>
-    </section>
-
-    <!-- Lifestyle: a day, as an index with pictures -->
-    <section class="day" id="day" data-field="ground" aria-labelledby="dayTitle">
-      <h2 class="h2 day__title" id="dayTitle" data-reveal>Where it fits in your day</h2>
-      <div class="day__grid">
-        <ul class="times" id="times">
-          <li class="time is-open">
-            <button type="button" aria-expanded="true" data-time="0">
-              <span class="time__at">6:40 am</span>
-              <span class="time__what">After a 5k in the rain</span>
-              <span class="time__can">Chili Guava</span>
-            </button>
-            <div class="time__more">
-              <div>
-                <p>Cold, salty, a little hot. Tops up what you sweated out without a sports drink’s sugar.</p>
-                <img src="assets/photos/run-monsoon.jpg" alt="A man running across a wet street" width="1200" height="1800" loading="lazy">
-              </div>
-            </div>
-          </li>
-          <li class="time">
-            <button type="button" aria-expanded="false" data-time="1">
-              <span class="time__at">9:10 am</span>
-              <span class="time__what">The 9:04 fast from Dadar</span>
-              <span class="time__can">Kokum Cola</span>
-            </button>
-            <div class="time__more">
-              <div>
-                <p>18 mg of caffeine from kola nut. Enough to arrive awake, not enough to shake.</p>
-                <img src="assets/photos/station-cst.jpg" alt="Commuters walking beside a local train in a Mumbai station" width="1600" height="1067" loading="lazy">
-              </div>
-            </div>
-          </li>
-          <li class="time">
-            <button type="button" aria-expanded="false" data-time="2">
-              <span class="time__at">1:45 pm</span>
-              <span class="time__what">After a heavy lunch</span>
-              <span class="time__can">Kokum Cola</span>
-            </button>
-            <div class="time__more">
-              <div>
-                <p>What the coast has always done after a big meal, with fibre and bubbles instead of a nap at your desk.</p>
-                <img src="assets/photos/friends-phone.jpg" alt="Two friends laughing at a phone outdoors" width="1400" height="934" loading="lazy">
-              </div>
-            </div>
-          </li>
-          <li class="time">
-            <button type="button" aria-expanded="false" data-time="3">
-              <span class="time__at">4:30 pm</span>
-              <span class="time__what">Instead of a third chai</span>
-              <span class="time__can">Chili Guava</span>
-            </button>
-            <div class="time__more">
-              <div>
-                <p>Tart, bright and 34 kcal. No sugar crash at six.</p>
-                <img src="assets/photos/chai-stall.jpg" alt="A tea seller pouring chai at a street stall" width="1400" height="786" loading="lazy">
-              </div>
-            </div>
-          </li>
-          <li class="time">
-            <button type="button" aria-expanded="false" data-time="4">
-              <span class="time__at">7:30 pm</span>
-              <span class="time__what">Sea face with friends</span>
-              <span class="time__can">Either, both</span>
-            </button>
-            <div class="time__more">
-              <div>
-                <p>Bring a 6-pack in the tote. Nobody has to be the designated driver of fun.</p>
-                <img src="assets/photos/friends-beach.jpg" alt="A group of young women sitting together on a beach" width="1600" height="1067" loading="lazy">
-              </div>
-            </div>
-          </li>
-          <li class="time">
-            <button type="button" aria-expanded="false" data-time="5">
-              <span class="time__at">10:15 pm</span>
-              <span class="time__what">Terrace, early start tomorrow</span>
-              <span class="time__can">Kokum Cola</span>
-            </button>
-            <div class="time__more">
-              <div>
-                <p>Kokum Cola over ice with lime and mint is a zero-proof spritz. You’ll still make the 7 am stand-up.</p>
-                <img src="assets/photos/terrace-sunset.jpg" alt="Sunset over rooftops and a phone tower" width="1600" height="1065" loading="lazy">
-              </div>
-            </div>
-          </li>
-        </ul>
-        <figure class="day__preview" aria-hidden="true">
-          <img id="dayPreview" src="assets/photos/run-monsoon.jpg" alt="" width="1200" height="1800" loading="lazy">
-        </figure>
-      </div>
-    </section>
-
-    <!-- Shop: the crate builder is the live thing -->
-    <section class="shop" id="shop" data-field="guava" aria-labelledby="shopTitle">
-      <h2 class="h2" id="shopTitle" data-reveal>Build a crate</h2>
-      <div class="crate" id="crate">
-        <div class="crate__controls">
-          <fieldset class="choice">
-            <legend>How many cans</legend>
-            <div class="choice__opts">
-              <label><input type="radio" name="size" value="6"><span>6</span></label>
-              <label><input type="radio" name="size" value="12" checked><span>12</span></label>
-              <label><input type="radio" name="size" value="24"><span>24</span></label>
-            </div>
-          </fieldset>
-
-          <div class="mix">
-            <label for="mix" class="mix__label">The mix</label>
-            <input type="range" id="mix" min="0" max="12" step="1" value="6" aria-describedby="mixOut">
-            <p class="mix__out" id="mixOut"><span data-kokum>6 Kokum Cola</span> <span data-guava>6 Chili Guava</span></p>
-          </div>
-
-          <fieldset class="choice">
-            <legend>How often</legend>
-            <div class="choice__opts choice__opts--wide">
-              <label><input type="radio" name="cadence" value="once" checked><span>Just once</span></label>
-              <label><input type="radio" name="cadence" value="2w"><span>Every 2 weeks</span></label>
-              <label><input type="radio" name="cadence" value="4w"><span>Every 4 weeks</span></label>
-            </div>
-          </fieldset>
-          <p class="crate__sub" id="crateSub">Subscribe and save 15%. Skip or cancel from your phone.</p>
-        </div>
-
-        <div class="crate__view">
-          <div class="crate__cans" id="crateCans" aria-hidden="true"></div>
-          <div class="crate__total">
-            <p class="crate__price"><span id="cratePrice">₹1,020</span> <span class="crate__per" id="cratePer">₹85 a can</span></p>
-            <button class="btn" type="button" id="crateAdd">Add crate to bag</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="more">
-        <h3 class="h3">Also in the shop</h3>
-        <ul class="list" id="productList"></ul>
-      </div>
-    </section>
-
-    <!-- Lifestyle, offline -->
-    <section class="sessions" id="sessions" data-field="chilli" aria-labelledby="sessionsTitle">
-      <div class="sessions__text">
-        <h2 class="h2" id="sessionsTitle" data-reveal>Come to a Kyor session</h2>
-        <p class="lead" data-reveal>Live sets, zine swaps and a zero-proof bar on a terrace, every second Saturday, in a different city each time.</p>
-        <ul class="dates" data-reveal>
-          <li><span class="dates__when">Sat 14 Nov</span><span class="dates__where">Bandra, Mumbai</span><a href="mailto:sessions@kyor.in?subject=RSVP%20Bandra%2014%20Nov">RSVP</a></li>
-          <li><span class="dates__when">Sat 28 Nov</span><span class="dates__where">Indiranagar, Bengaluru</span><a href="mailto:sessions@kyor.in?subject=RSVP%20Indiranagar%2028%20Nov">RSVP</a></li>
-          <li><span class="dates__when">Sat 12 Dec</span><span class="dates__where">Koregaon Park, Pune</span><a href="mailto:sessions@kyor.in?subject=RSVP%20Koregaon%20Park%2012%20Dec">RSVP</a></li>
-          <li><span class="dates__when">Sat 26 Dec</span><span class="dates__where">Hauz Khas, Delhi</span><a href="mailto:sessions@kyor.in?subject=RSVP%20Hauz%20Khas%2026%20Dec">RSVP</a></li>
-        </ul>
-      </div>
-      <figure class="sessions__pic" data-reveal>
-        <img src="assets/photos/sherbet-stall.jpg" alt="A street sherbet stall lit up with rows of coloured syrup bottles" width="1800" height="1013" loading="lazy">
-        <figcaption>India has always had a fizz stall on the corner.</figcaption>
-      </figure>
-    </section>
+    </nav>
   </main>
 
-  <footer class="foot" data-field="kokum">
-    <p class="foot__name" aria-hidden="true"><span>KYOR</span></p>
-    <div class="foot__cols">
-      <p>KYOR Beverages, Pune<br><a href="mailto:hello@kyor.in">hello@kyor.in</a></p>
-      <p><a href="#shop">Shop</a><br><a href="#sessions">Sessions</a><br><a href="checkout.html">Checkout</a></p>
-      <p class="foot__credits">Photographs by Phadke09 (CC BY-SA 4.0) and Subray Hegde (CC BY 1.0) on Wikimedia Commons; Samee Anderson, Shubha Gambhir, surya kumar chintapula, Anudeep, Atharva Whaval, atelierbyvineeth, Rudra Gupta, Zoshua Colah, Anirudh, Yash Parashar, Debabrata Patra, Karthik Balakrishnan and Saravanan Murugan on Unsplash; Sagar Pujari on Pexels.</p>
-    </div>
-  </footer>
+  <div class="tip" id="tip" aria-hidden="true"><b></b><span></span></div>
 
+  <!-- ===================== ROOMS ===================== -->
+  <section class="room room--origins" id="room-origins" data-room-panel="origins" role="dialog" aria-modal="true" aria-labelledby="origins-title" hidden>
+    <button type="button" class="room__close" data-close-room>← Back to the can</button>
+    <div class="room__scroll">
+      <header class="room__head">
+        <img class="room__art" data-art="fruit" src="assets/kit/kokum/fruit.webp" alt="">
+        <h2 class="room__title" id="origins-title" data-origins-title>Konkan<br>to can</h2>
+        <p class="room__lead" data-origins-lead>Kokum from the red laterite coast, chilli from Guntur, guava from Prayagraj, all canned in Pune. Drag the strip.</p>
+      </header>
+      <div class="strip" id="strip" tabindex="0" aria-label="Places, drag or use the arrow keys">
+        <article class="stop"><img src="assets/photos/konkan-fort-window.jpg" alt="The Arabian Sea through a window in a laterite fort wall" width="1400" height="1859" loading="lazy"><h3>Sindhudurg</h3><p>Kokum trees grow along the red laterite coast. Picked by hand in April and May, when the fruit turns deep purple.</p></article>
+        <article class="stop"><img src="assets/photos/kokum-steel-plate.jpg" alt="Whole and halved kokum fruit on a steel plate" width="1280" height="1103" loading="lazy"><h3>The rind</h3><p>Only the rind goes in the can. The seeds go back to the farmers, who press them for kokum butter.</p></article>
+        <article class="stop"><img src="assets/photos/kokum-rinds-drying.jpg" alt="Kokum rinds drying on a cloth in the sun" width="1280" height="1711" loading="lazy"><h3>7 days of sun</h3><p>Rinds dry on cloth for a week, the way Konkani kitchens have always done it.</p></article>
+        <article class="stop"><img src="assets/photos/chilli-farmer.jpg" alt="A farmer laughing among heaps of red chillies" width="1600" height="1067" loading="lazy"><h3>Guntur</h3><p>Chilli is graded by hand by a women-led collective, then roasted over wood for a slow burn.</p></article>
+        <article class="stop"><img src="assets/photos/chilli-tarps.jpg" alt="Red chillies drying on tarps in a field below green hills" width="1800" height="1350" loading="lazy"><h3>2 weeks on tarps</h3><p>Dried in the open until it snaps.</p></article>
+        <article class="stop"><img src="assets/photos/chilli-newspaper.jpg" alt="A heap of red chillies on newspaper" width="1400" height="927" loading="lazy"><h3>Then the fire</h3><p>Roasted over wood in small lots, so the heat in Chili Guava builds instead of biting.</p></article>
+        <article class="stop"><img src="assets/photos/guava-hand.jpg" alt="A hand holding half a pink guava" width="1400" height="2100" loading="lazy"><h3>Pink inside</h3><p>The guava cart outside every school, cut in four with chilli and salt. That’s the flavour.</p></article>
+        <article class="stop"><img src="assets/photos/guava-market.jpg" alt="Green guavas stacked at a market stall" width="1200" height="2132" loading="lazy"><h3>Prayagraj</h3><p>The winter crop has the pinkest flesh. Pressed within 24 hours of picking.</p></article>
+        <article class="stop"><img src="assets/photos/marine-drive.jpg" alt="People sitting along the sea wall at Marine Drive, Mumbai" width="1600" height="1067" loading="lazy"><h3>Your city</h3><p>Brewed and canned in Pune. One to five days anywhere in India, next day in four metros.</p></article>
+      </div>
+      <ul class="stats">
+        <li><b>140</b><span>farming families</span></li>
+        <li><b>7</b><span>days in the sun</span></li>
+        <li><b>24 h</b><span>tree to press</span></li>
+        <li><b>0 g</b><span>plastic in the box</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="room room--day" id="room-day" data-room-panel="day" role="dialog" aria-modal="true" aria-labelledby="day-title" hidden>
+    <button type="button" class="room__close" data-close-room>← Back to the can</button>
+    <div class="room__scroll">
+      <header class="room__head room__head--row">
+        <h2 class="room__title" id="day-title">One can,<br>any hour</h2>
+        <p class="room__lead">Drag the runner through your day.</p>
+      </header>
+      <div class="day">
+        <p class="day__clock" id="dayClock" aria-live="polite">6:40<small>am</small></p>
+        <div class="day__track">
+          <input type="range" id="dayRange" min="0" max="1000" value="0" aria-label="Time of day" aria-valuetext="6:40 am, after a 5k in the rain">
+          <ol class="day__ticks" aria-hidden="true"><li>6 am</li><li>9 am</li><li>noon</li><li>3 pm</li><li>6 pm</li><li>9 pm</li><li>11 pm</li></ol>
+        </div>
+        <article class="moment" id="moment">
+          <figure class="moment__pic"><img id="momentImg" src="assets/photos/run-monsoon.jpg" alt="" width="1200" height="1800"></figure>
+          <div class="moment__text">
+            <h3 id="momentTitle">After a 5k in the rain</h3>
+            <p id="momentBody">Cold, salty, a little hot. Tops up what you sweated out without a sports drink’s sugar.</p>
+            <p class="moment__pair">Pairs with <b id="momentCan">Chili Guava</b></p>
+            <button class="btn btn--ink" type="button" id="momentAdd" data-add="cg6">Add 6 Chili Guava · ₹540</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="room room--inside" id="room-inside" data-room-panel="inside" role="dialog" aria-modal="true" aria-labelledby="inside-title" hidden>
+    <button type="button" class="room__close" data-close-room>← Back to the can</button>
+    <div class="room__scroll">
+      <header class="room__head">
+        <img class="room__art" data-art="calm" src="assets/kit/kokum/monk.webp" alt="">
+        <h2 class="room__title" id="inside-title">What’s in<br>the can</h2>
+        <p class="room__lead" data-inside-lead>3 g of prebiotic fibre from chicory root feeds the good bacteria you already have. No added sugar. Nothing you can’t pronounce.</p>
+      </header>
+      <ul class="counters" id="counters"></ul>
+      <div class="ingredients" id="ingredients"></div>
+      <p class="room__note">Per 355 ml can. Vegan and gluten-free. Kokum and chilli are traditional ingredients, not medicine.</p>
+    </div>
+  </section>
+
+  <section class="room room--sessions" id="room-sessions" data-room-panel="sessions" role="dialog" aria-modal="true" aria-labelledby="sessions-title" hidden>
+    <button type="button" class="room__close" data-close-room>← Back to the can</button>
+    <div class="room__scroll">
+      <header class="room__head">
+        <img class="room__art" data-art="arch" src="assets/kit/kokum/arch.webp" alt="">
+        <h2 class="room__title" id="sessions-title">Drink<br>with us</h2>
+        <p class="room__lead">Live sets, zine swaps and a zero-proof Konkan Spritz bar on a terrace, every second Saturday, in a different city each time.</p>
+      </header>
+      <ul class="dates">
+        <li><span class="dates__d">14 Nov</span><span class="dates__w">Bandra, Mumbai</span><a class="btn btn--ink" href="mailto:sessions@kyor.in?subject=RSVP%20Bandra%2014%20Nov">RSVP</a></li>
+        <li><span class="dates__d">28 Nov</span><span class="dates__w">Indiranagar, Bengaluru</span><a class="btn btn--ink" href="mailto:sessions@kyor.in?subject=RSVP%20Indiranagar%2028%20Nov">RSVP</a></li>
+        <li><span class="dates__d">12 Dec</span><span class="dates__w">Koregaon Park, Pune</span><a class="btn btn--ink" href="mailto:sessions@kyor.in?subject=RSVP%20Koregaon%20Park%2012%20Dec">RSVP</a></li>
+        <li><span class="dates__d">26 Dec</span><span class="dates__w">Hauz Khas, Delhi</span><a class="btn btn--ink" href="mailto:sessions@kyor.in?subject=RSVP%20Hauz%20Khas%2026%20Dec">RSVP</a></li>
+      </ul>
+      <figure class="room__photo">
+        <img src="assets/photos/sherbet-stall.jpg" alt="A street sherbet stall lit up with rows of coloured syrup bottles" width="1800" height="1013" loading="lazy">
+        <figcaption>India has always had a fizz stall on the corner. We just brought it up to the terrace.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="room room--shop" id="room-shop" data-room-panel="shop" role="dialog" aria-modal="true" aria-labelledby="shop-title" hidden>
+    <button type="button" class="room__close" data-close-room>← Back to the can</button>
+    <div class="room__scroll">
+      <header class="room__head room__head--row">
+        <h2 class="room__title" id="shop-title">Build<br>a crate</h2>
+        <p class="room__lead">Pick a size, slide the mix, decide how often. Subscriptions save 15% and skip from your phone.</p>
+      </header>
+      <div class="crate">
+        <div class="crate__cans" id="crateCans" aria-hidden="true"></div>
+        <div class="crate__controls">
+          <fieldset class="choice">
+            <legend>Cans</legend>
+            <label><input type="radio" name="size" value="6"><span>6</span></label>
+            <label><input type="radio" name="size" value="12" checked><span>12</span></label>
+            <label><input type="radio" name="size" value="24"><span>24</span></label>
+          </fieldset>
+          <div class="mix">
+            <label for="mix">The mix</label>
+            <input type="range" id="mix" min="0" max="12" step="1" value="6">
+            <p class="mix__out"><span data-kokum>6 Kokum Cola</span><span data-guava>6 Chili Guava</span></p>
+          </div>
+          <fieldset class="choice choice--wide">
+            <legend>How often</legend>
+            <label><input type="radio" name="cadence" value="once" checked><span>Once</span></label>
+            <label><input type="radio" name="cadence" value="2w"><span>Every 2 weeks</span></label>
+            <label><input type="radio" name="cadence" value="4w"><span>Every 4 weeks</span></label>
+          </fieldset>
+          <p class="crate__price"><b id="cratePrice">₹1,020</b><span id="cratePer">₹85 a can</span></p>
+          <button class="btn btn--ink btn--big" type="button" id="crateAdd">Add crate to bag</button>
+        </div>
+      </div>
+      <h3 class="shelf__title">Also on the shelf</h3>
+      <ul class="shelf" id="shelf"></ul>
+    </div>
+  </section>
+
+  <!-- bag -->
   <dialog class="bag" id="bag" aria-labelledby="bagTitle">
     <div class="bag__head">
-      <h2 class="h3" id="bagTitle">Your bag</h2>
-      <button type="button" class="round" data-close-bag aria-label="Close bag">✕</button>
+      <h2 id="bagTitle">Your bag</h2>
+      <button type="button" class="bag__x" data-close-bag aria-label="Close bag">✕</button>
     </div>
     <p class="bag__ship" id="bagShip"></p>
     <ul class="bag__list" id="bagList"></ul>
     <div class="bag__foot">
-      <p class="bag__sum"><span>Subtotal</span><span id="bagTotal">₹0</span></p>
-      <a class="btn btn--block" href="checkout.html" id="toCheckout">Checkout</a>
+      <p class="bag__sum"><span>Subtotal</span><b id="bagTotal">₹0</b></p>
+      <a class="btn btn--ink btn--block" href="checkout.html" id="toCheckout">Checkout</a>
     </div>
   </dialog>
+
+  <footer class="credits">
+    Photographs: Phadke09 (CC BY-SA 4.0) and Subray Hegde (CC BY 1.0) on Wikimedia Commons; Samee Anderson, Shubha Gambhir, surya kumar chintapula, Anudeep, Atharva Whaval, atelierbyvineeth, Rudra Gupta, Zoshua Colah, Anirudh, Debabrata Patra, Karthik Balakrishnan and Saravanan Murugan on Unsplash; Sagar Pujari on Pexels.
+  </footer>
 
   <p class="toast" id="toast" role="status" aria-live="polite"></p>
 
   <script src="js/data.js"></script>
   <script src="js/store.js"></script>
-  <script src="js/site.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

@@ -1,77 +1,64 @@
-# KYOR: prebiotic soda from India
+# KYOR: peel the can
 
-Website build for Kyor. It's a static site with no build step. `index.html` is the home page and shop, and `checkout.html` is the payment page.
+Website build for Kyor, a prebiotic soda from India (Kokum Cola and Chili Guava). It's a static site with no build step. Three.js loads from a CDN.
 
 ```bash
 python3 -m http.server 8080   # then open http://localhost:8080
 ```
 
-## The idea
+## The experience
 
-The two flavours are rituals most Indians already know: a glass of kokum after a heavy coastal lunch, and guava from the school cart rubbed with chilli and salt. **The page is coloured by what is in the can.** Each chapter is one flat field taken from the product: kokum rind (oxblood), guava flesh (pink), Guntur chilli (red), the can's sage, and matte aluminium. Midway through, the can holds still while those colours wipe up behind it, one ingredient at a time.
+There's no long scrolling page. The site is one object:
 
-How the direction was chosen:
-- **Awwwards Food & Drink sites:** Morpho, Vibe, Yaas, Agrumea, Lajoya and Delta Cafés. The common thread is a large real product, real photography and flat colour fields.
-- **The `taste-skill` study of 247 award sites:** I used its "colour chapters" direction with the "object, large" hero.
-- **Its house rules:** no eyebrow labels, no monospace, no 01/02 numbering, no hairlines, gradients or shadows, and two typefaces at most.
-- **The type:** Besley, a fat Clarendon like the can's wordmark (the old-school face), with Switzer, a modern grotesk.
-- **Language:** everything is in English. Indian context comes from places, ingredients and photographs, not from script.
+1. **The can.** A matte aluminium can rendered live in WebGL. Its label isn't a picture: it's composed in the browser from the brand's Photoshop live-type kits, using the kits' own positions, colours, layers and fonts (Montserrat, Barlow, Roboto). Drag it to spin it; the back carries nutrition, ingredients and a barcode. Behind it, two rows of giant type run the flavour name in opposite directions.
+2. **Peel the label.** Hold the button, scroll down or swipe up. Every tile on the label lifts off the curved can, flattens, and deals itself out into an arc of cards around the can, while the decorative tiles drift far behind. Bubbles fizz out of the top.
+3. **The label is the menu.** Each card opens a room, and the giant type shouts its name while you hover it:
 
-## What's on the page
+| Tile on Kokum Cola | Tile on Chili Guava | Room |
+| --- | --- | --- |
+| Kokum fruit | Guava and chillies | **Origins**: a drag strip of real photographs, from Sindhudurg and Guntur to Prayagraj and your city |
+| Runner | Runner | **Your day**: drag the runner along the day. The clock, the room's colour, the photo and the suggested flavour all change |
+| Meditating figure | Mandala eye | **Inside**: counters that roll up, plus every ingredient and where it comes from |
+| Archway | Ornate arch | **Sessions**: terrace events with RSVP links |
+| KYOR band | KYOR wordmark | **Shop**: the crate builder (6, 12 or 24 cans, a Kokum/Guava mix slider, subscribe for 15% off) and the shelf |
 
-| Section | What it does |
-| --- | --- |
-| Hero | The can, large, on its fruit's colour. Switching between Kokum Cola and Chili Guava recolours the hero and swaps the can. |
-| Flavours you grew up with | The two rituals, told with real photographs. |
-| What goes in the can | A held scroll scene: the can stays put and five colour fields wipe through, each with one ingredient fact. |
-| Per 350 ml can | Nutrition, as a plain table. |
-| From the farm to your fridge | A drag row of places: Sindhudurg, Guntur, Prayagraj, Pune, your city. |
-| Where it fits in your day | Six moments from 6:40 am to 10:15 pm. Hovering or tapping a row shows its photograph. |
-| Build a crate | **The interactive part.** Pick 6, 12 or 24 cans, slide the Kokum/Guava mix, choose one-off or a subscription, and watch the crate and price update. |
-| Come to a Kyor session | The offline community: terrace events with RSVP links. |
-| Checkout | Contact, delivery (the pincode fills in the city and the delivery date), payment by UPI, card, netbanking or cash on delivery, promo code, GST, and a confirmation screen. |
+4. **Flavour switch.** The can spins twice and swaps its label at the halfway point. The stage moves from maroon to forest green and every room follows.
 
-Accessibility:
-- Native scrolling everywhere: no scroll hijacking and no custom cursor.
-- With reduced motion or without JavaScript, the held scene becomes five stacked chapters and nothing stays hidden.
-- Every control works from the keyboard.
+The header also links straight to each room, and every room has its own URL (`#origins`, `#day`, `#inside`, `#sessions`, `#shop`). Esc or the browser's Back button closes a room. Without WebGL, the site shows the still can with plain room links. With reduced motion on, the peel is instant and nothing loops.
+
+**Checkout** (`checkout.html`) takes contact details and a delivery address (the pincode fills in the city and the delivery date). Payment can be UPI, card, netbanking or cash on delivery, with promo codes and GST shown, and the page ends on an order confirmation.
 
 ## Files
 
-- `index.html`, `checkout.html`: the two pages
-- `css/site.css`: design tokens (colour fields, type scale, spacing) and every section, with tablet and phone layouts
-- `css/checkout.css`: the checkout
-- `js/data.js`: **prices, products and the flavour copy**
-- `js/store.js`: the bag, kept in the browser's localStorage and shared by both pages
-- `js/site.js`: flavour switch, held scene, origins row, day index, crate builder, bag
-- `js/checkout.js`: validation, totals and a test-mode payment
-- `assets/cans/`: the cans, cut out of the tested renders in `assets/renders/`
+- `index.html`: the stage, the rooms and the bag
+- `css/kyor.css`: the palette from the label kits, the type, every room, plus tablet and phone layouts
+- `js/scene.js`: the 3D can, the label composer, the peel morph (curved to flat), the card layouts, hover, drag and the bubbles
+- `js/label-data.js`: both label layouts, translated from the kits' Photoshop build scripts
+- `js/app.js`: hold-to-peel, the marquee, the rooms, the day slider, the crate builder and the bag
+- `js/data.js`: **prices, products, the six moments of the day, counters and ingredients**
+- `js/store.js`: the bag (localStorage), shared with the checkout
+- `js/checkout.js`, `css/checkout.css`, `checkout.html`: the checkout
+- `assets/kit/`: the label layers from the Photoshop kits, converted to WebP
+- `assets/cans/`: still cans, used before WebGL loads and in the shop
 - `assets/photos/`: photographs (credits below)
 
 ## Before launch
 
-1. **Payments.** `takePayment()` in `js/checkout.js` simulates a successful payment, and the page says it's in test mode. To go live, create the order on a server and open Razorpay, Cashfree or Stripe from there. Card details should only ever be entered on the provider's page.
-2. **Product photography.** The cans are cut from the 1024 px renders, so they look soft at hero size. A 3000 px or larger render or photograph of each can, on a transparent background, will fix that.
-3. **Sample content to confirm or replace:**
-   - Prices: ₹540 for a 6-pack, ₹1,020 for 12, ₹1,920 for 24, and 15% off subscriptions.
-   - Nutrition figures and the ingredient lists.
-   - Sourcing facts: 140 farming families, the women-led chilli collective, 24-hour pressing, a Pune brewery making 4,000 cans a day.
-   - Delivery promises and the ₹3,000 cash-on-delivery limit.
-   - Session dates and neighbourhoods.
-   - The `hello@` and `sessions@kyor.in` addresses.
-   - The `FIRSTSIP` promo code.
-   - The merch items.
-4. **Health copy** is kept to traditional use and plain nutrition. Check it against FSSAI advertising rules.
+1. **Payments.** `takePayment()` in `js/checkout.js` simulates a payment, and the page says it's in test mode. To go live, create the order on a server and open Razorpay, Cashfree or Stripe from there.
+2. **Sample content to confirm:**
+   - Prices and the subscription discount.
+   - Nutrition figures (note the label says 355 ml).
+   - Sourcing facts: 140 families, the women-led collective, the Pune brewery.
+   - Session dates and the `kyor.in` email addresses.
+   - The `FIRSTSIP` promo code and the merch items.
+3. **Health copy** stays with traditional use and plain nutrition. Check it against FSSAI advertising rules.
 
 ## Photo credits
-
-Every photo is downloaded into `assets/photos/` and credited in the site footer. None of them shows KYOR's own farms or staff. They show the world the drink comes from.
 
 | File | Photograph | Licence | Source |
 | --- | --- | --- | --- |
 | kokum-steel-plate.jpg | *Garcinia indica fruit*, Phadke09 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Garcinia_indica_fruit.jpg |
 | kokum-rinds-drying.jpg | *Garcinia indica rinds being dried*, Subray Hegde | CC BY 1.0 | https://commons.wikimedia.org/wiki/File:Garcinia_indica_rinds_being_dried.jpg |
-| kokum-sugar-jar.jpg | *Kokam fruit recipe with sugar*, Phadke09 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Kokam_Fruit_Recipe_with_Sugar_Garcinia_indica_fruit.jpg |
 | guava-hand.jpg | Samee Anderson | Unsplash Licence | https://unsplash.com/photos/eiCzR_AVHJQ |
 | chilli-newspaper.jpg | Shubha Gambhir | Unsplash Licence | https://unsplash.com/photos/47gzK__lX30 |
 | chilli-farmer.jpg | surya kumar chintapula | Unsplash Licence | https://unsplash.com/photos/ztxMS2tLorw |
